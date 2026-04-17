@@ -8,6 +8,7 @@ export default function App() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState("dashboard");
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
 
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
@@ -111,11 +112,25 @@ export default function App() {
     setTotal((prev) => prev - 1);
   };
 
-  const filteredPatients = patients.filter((p) =>
-    `${p.name} ${p.phone}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+  const filteredPatients = patients
+    .filter((p) => {
+      const matchesSearch = `${p.name} ${p.phone}`
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      if (!matchesSearch) return false;
+
+      if (filter === "active") return p.status === "active";
+
+      if (filter === "recent") {
+        const created = new Date(p.created_at);
+        const now = new Date();
+        const diff = (now - created) / (1000 * 60 * 60 * 24);
+        return diff <= 7;
+      }
+
+      return true;
+    });
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
@@ -172,6 +187,20 @@ export default function App() {
               />
 
               <button onClick={addPatient}>Add</button>
+            </div>
+
+            <div style={{ display: "flex", gap: 10, marginBottom: 15 }}>
+              <button onClick={() => setFilter("all")}>
+                All
+              </button>
+
+              <button onClick={() => setFilter("active")}>
+                Active
+              </button>
+
+              <button onClick={() => setFilter("recent")}>
+                Recent
+              </button>
             </div>
 
             <div style={{ display: "flex", gap: 8, marginBottom: 15, alignItems: "center" }}>

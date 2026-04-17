@@ -133,29 +133,46 @@ export default function App() {
     });
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
+    <div style={{
+      display: "flex",
+      height: "100vh",
+      fontFamily: "Inter, sans-serif",
+      background: "#f5f7fb"
+    }}>
 
       {/* SIDEBAR */}
       <div style={{
-        width: 220,
-        background: "#111827",
-        color: "white",
-        padding: 20
+        width: 240,
+        background: "#0f172a",
+        color: "#fff",
+        padding: 20,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
       }}>
-        <h2>Clinic CRM</h2>
-        <p
-          style={{ cursor: "pointer", opacity: 0.8 }}
-          onClick={() => setPage("dashboard")}
-        >
-          Dashboard
-        </p>
+        <div>
+          <h2 style={{ marginBottom: 30 }}>
+            CRM <span style={{ color: "#ef4444" }}>Pro</span>
+          </h2>
 
-        <p
-          style={{ cursor: "pointer", opacity: 0.8 }}
-          onClick={() => setPage("patients")}
-        >
-          Patients
-        </p>
+          <p
+            onClick={() => setPage("dashboard")}
+            style={{ cursor: "pointer", marginBottom: 15, opacity: 0.8 }}
+          >
+            Dashboard
+          </p>
+
+          <p
+            onClick={() => setPage("patients")}
+            style={{ cursor: "pointer", opacity: 0.8 }}
+          >
+            Patients
+          </p>
+        </div>
+
+        <div style={{ opacity: 0.6 }}>
+          <p>Admin</p>
+        </div>
       </div>
 
       {/* MAIN */}

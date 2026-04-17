@@ -9,8 +9,7 @@ export default function App() {
   const fetchPatients = async () => {
     const { data } = await supabase
       .from("patients")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*");
 
     setPatients(data || []);
   };
@@ -73,10 +72,31 @@ export default function App() {
               padding: 10,
               borderBottom: "1px solid #eee",
               display: "flex",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
+              alignItems: "center"
             }}
           >
             <span>{p.name} - {p.phone}</span>
+
+            <button
+              onClick={async () => {
+                await supabase
+                  .from("patients")
+                  .delete()
+                  .eq("id", p.id);
+
+                fetchPatients();
+              }}
+              style={{
+                background: "red",
+                color: "white",
+                border: "none",
+                padding: "5px 10px",
+                cursor: "pointer"
+              }}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>

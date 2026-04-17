@@ -136,17 +136,22 @@ export default function App() {
     <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
 
       {/* SIDEBAR */}
-      <div style={{ width: 220, background: "#111", color: "#fff", padding: 20 }}>
+      <div style={{
+        width: 220,
+        background: "#111827",
+        color: "white",
+        padding: 20
+      }}>
         <h2>Clinic CRM</h2>
         <p
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", opacity: 0.8 }}
           onClick={() => setPage("dashboard")}
         >
           Dashboard
         </p>
 
         <p
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", opacity: 0.8 }}
           onClick={() => setPage("patients")}
         >
           Patients
@@ -154,14 +159,26 @@ export default function App() {
       </div>
 
       {/* MAIN */}
-      <div style={{ flex: 1, padding: 30 }}>
+      <div style={{
+        flex: 1,
+        padding: 40,
+        background: "#f9fafb"
+      }}>
         {page === "dashboard" && (
           <>
             <h1>Dashboard</h1>
 
-            <div style={{ padding: 15, border: "1px solid #ddd", width: 200 }}>
-              <h3>Total Patients</h3>
-              <p>{total}</p>
+            <div style={{
+              background: "white",
+              padding: 20,
+              borderRadius: 12,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              width: 220
+            }}>
+              <h4 style={{ margin: 0, color: "#666" }}>Total Patients</h4>
+              <p style={{ fontSize: 28, fontWeight: "bold", margin: "10px 0 0" }}>
+                {total}
+              </p>
             </div>
           </>
         )}
@@ -186,46 +203,66 @@ export default function App() {
                 style={{ marginRight: 10 }}
               />
 
-              <button onClick={addPatient}>Add</button>
-            </div>
-
-            <div style={{ display: "flex", gap: 10, marginBottom: 15 }}>
-              <button onClick={() => setFilter("all")}>
-                All
-              </button>
-
-              <button onClick={() => setFilter("active")}>
-                Active
-              </button>
-
-              <button onClick={() => setFilter("recent")}>
-                Recent
-              </button>
-            </div>
-
-            <div style={{ display: "flex", gap: 8, marginBottom: 15, alignItems: "center" }}>
-              <input
-                placeholder="Search patient..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+              <button
+                onClick={addPatient}
                 style={{
-                  padding: 8,
-                  width: "100%",
-                  maxWidth: 300
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: "#3b82f6",
+                  color: "white",
+                  cursor: "pointer"
                 }}
-              />
+              >
+                Add
+              </button>
+            </div>
 
-              {search && (
-                <button
-                  onClick={() => setSearch("")}
-                  style={{
-                    padding: "8px 10px",
-                    cursor: "pointer"
-                  }}
-                >
-                  ✕
+            <div style={{
+              background: "white",
+              padding: 15,
+              borderRadius: 12,
+              marginBottom: 20,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
+            }}>
+              <div style={{ display: "flex", gap: 10, marginBottom: 15 }}>
+                <button onClick={() => setFilter("all")}>
+                  All
                 </button>
-              )}
+
+                <button onClick={() => setFilter("active")}>
+                  Active
+                </button>
+
+                <button onClick={() => setFilter("recent")}>
+                  Recent
+                </button>
+              </div>
+
+              <div style={{ display: "flex", gap: 8, marginBottom: 15, alignItems: "center" }}>
+                <input
+                  placeholder="Search patient..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  style={{
+                    padding: 8,
+                    width: "100%",
+                    maxWidth: 300
+                  }}
+                />
+
+                {search && (
+                  <button
+                    onClick={() => setSearch("")}
+                    style={{
+                      padding: "8px 10px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
 
             {search && filteredPatients.length === 0 && (
@@ -239,11 +276,14 @@ export default function App() {
                 <div
                   key={p.id}
                   style={{
-                    padding: 10,
-                    borderBottom: "1px solid #eee",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginBottom: 10,
+                    background: "white",
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center"
+                    alignItems: "center",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.05)"
                   }}
                 >
                   {editId === p.id ? (
@@ -283,14 +323,28 @@ export default function App() {
                       <span>{p.name} - {p.phone}</span>
 
                       <div>
-                        <button onClick={() => startEdit(p)}>Edit</button>
+                        <button
+                          onClick={() => startEdit(p)}
+                          style={{
+                            padding: "5px 10px",
+                            borderRadius: 6,
+                            border: "1px solid #ddd",
+                            cursor: "pointer"
+                          }}
+                        >
+                          Edit
+                        </button>
 
                         <button
                           onClick={() => deletePatient(p.id)}
                           style={{
-                            background: "red",
+                            background: "#ef4444",
                             color: "white",
-                            marginLeft: 5
+                            border: "none",
+                            padding: "5px 10px",
+                            borderRadius: 6,
+                            marginLeft: 5,
+                            cursor: "pointer"
                           }}
                         >
                           Delete

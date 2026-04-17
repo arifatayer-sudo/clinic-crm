@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
+import { supabase } from "./supabase";
 
 export default function App() {
   const [patients, setPatients] = useState([]);
@@ -23,11 +23,15 @@ export default function App() {
     <div style={{ padding: 40 }}>
       <h1>Patients</h1>
 
-      {patients.map((p) => (
-        <div key={p.id}>
-          {p.name} - {p.phone}
-        </div>
-      ))}
+      {patients.length === 0 ? (
+        <p>No patients found</p>
+      ) : (
+        patients.map((p) => (
+          <div key={p.id}>
+            {p.name} - {p.phone}
+          </div>
+        ))
+      )}
     </div>
   );
 }

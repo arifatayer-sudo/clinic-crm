@@ -7,6 +7,7 @@ export default function App() {
   const [phone, setPhone] = useState("");
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState("dashboard");
+  const [search, setSearch] = useState("");
 
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
@@ -110,6 +111,12 @@ export default function App() {
     setTotal((prev) => prev - 1);
   };
 
+  const filteredPatients = patients.filter((p) =>
+    `${p.name} ${p.phone}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
 
@@ -167,10 +174,26 @@ export default function App() {
               <button onClick={addPatient}>Add</button>
             </div>
 
+            <input
+              placeholder="Search patient..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                marginBottom: 15,
+                padding: 8,
+                width: "100%",
+                maxWidth: 300
+              }}
+            />
+
+            {search && filteredPatients.length === 0 && (
+              <p>No patients found</p>
+            )}
+
             {loading ? (
               <p>Loading patients...</p>
             ) : (
-              patients.map((p) => (
+              filteredPatients.map((p) => (
                 <div
                   key={p.id}
                   style={{

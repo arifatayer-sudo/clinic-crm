@@ -174,17 +174,30 @@ export default function App() {
               <button onClick={addPatient}>Add</button>
             </div>
 
-            <input
-              placeholder="Search patient..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{
-                marginBottom: 15,
-                padding: 8,
-                width: "100%",
-                maxWidth: 300
-              }}
-            />
+            <div style={{ display: "flex", gap: 8, marginBottom: 15, alignItems: "center" }}>
+              <input
+                placeholder="Search patient..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  padding: 8,
+                  width: "100%",
+                  maxWidth: 300
+                }}
+              />
+
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  style={{
+                    padding: "8px 10px",
+                    cursor: "pointer"
+                  }}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
 
             {search && filteredPatients.length === 0 && (
               <p>No patients found</p>

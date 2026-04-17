@@ -5,6 +5,7 @@ export default function App() {
   const [patients, setPatients] = useState([]);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [total, setTotal] = useState(0);
 
   const fetchPatients = async () => {
     const { data } = await supabase
@@ -12,6 +13,7 @@ export default function App() {
       .select("*");
 
     setPatients(data || []);
+    setTotal(data?.length || 0);
   };
 
   useEffect(() => {
@@ -42,6 +44,12 @@ export default function App() {
 
       {/* MAIN */}
       <div style={{ flex: 1, padding: 30 }}>
+        <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
+          <div style={{ padding: 15, border: "1px solid #ddd" }}>
+            <h3>Total Patients</h3>
+            <p>{total}</p>
+          </div>
+        </div>
 
         <h1>Patients</h1>
 

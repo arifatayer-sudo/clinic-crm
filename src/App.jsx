@@ -9,6 +9,10 @@ export default function App() {
   const [page, setPage] = useState("dashboard");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [procedureId, setProcedureId] = useState("");
+  const [price, setPrice] = useState("");
+  const [procedures, setProcedures] = useState([]);
 
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
@@ -22,7 +26,22 @@ export default function App() {
 
     const { data, error } = await supabase
       .from("patients")
-      .select("*");
+      .select(`
+        *,
+        patient_procedures (
+          id,
+          price,
+          procedures (
+            name,
+            default_price
+          )
+        ),
+        reminders (
+          id,
+          title,
+          date
+        )
+      `);
 
     if (error) console.log(error);
 
@@ -32,8 +51,22 @@ export default function App() {
     setLoading(false);
   };
 
+  async function fetchProcedures() {
+    const { data, error } = await supabase
+      .from("procedures")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if (!error) {
+      setProcedures(data);
+    } else {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     fetchPatients();
+    fetchProcedures();
   }, []);
 
   // ⌨️ ESC closes edit mode
@@ -111,6 +144,24 @@ export default function App() {
     setPatients((prev) => prev.filter((p) => p.id !== id));
     setTotal((prev) => prev - 1);
   };
+
+  async function addPatientProcedure() {
+    const { error } = await supabase
+      .from("patient_procedures")
+      .insert([
+        {
+          patient_id: selectedPatient.id,
+          procedure_id: procedureId,
+          price: price || 0,
+        },
+      ]);
+
+    if (!error) {
+      setSelectedPatient(null);
+      setProcedureId("");
+      setPrice("");
+    }
+  }
 
   const filteredPatients = patients
     .filter((p) => {
@@ -341,11 +392,24 @@ export default function App() {
 
                       <div>
                         <button
+                          onClick={() => setSelectedPatient(p)}
+                          style={{
+                            padding: "5px 10px",
+                            borderRadius: 6,
+                            border: "1px solid #ddd",
+                            cursor: "pointer"
+                          }}
+                        >
+                          Add Procedure
+                        </button>
+
+                        <button
                           onClick={() => startEdit(p)}
                           style={{
                             padding: "5px 10px",
                             borderRadius: 6,
                             border: "1px solid #ddd",
+                            marginLeft: 5,
                             cursor: "pointer"
                           }}
                         >
@@ -375,6 +439,30 @@ export default function App() {
           </>
         )}
       </div>
+
+      {selectedPatient && (
+        <div>
+          <h3>Add Procedure for {selectedPatient.name}</h3>
+
+          <select onChange={(e) => setProcedureId(e.target.value)}>
+            <option value="">Select procedure</option>
+            {procedures.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+
+          <input
+            placeholder="Price"
+            type="number"
+            onChange={(e) => setPrice(e.target.value)}
+          />
+
+          <button onClick={addPatientProcedure}>Save</button>
+          <button onClick={() => setSelectedPatient(null)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 }

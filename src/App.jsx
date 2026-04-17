@@ -6,6 +6,7 @@ export default function App() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [total, setTotal] = useState(0);
+  const [page, setPage] = useState("dashboard");
 
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
@@ -115,114 +116,127 @@ export default function App() {
       {/* SIDEBAR */}
       <div style={{ width: 220, background: "#111", color: "#fff", padding: 20 }}>
         <h2>Clinic CRM</h2>
-        <p>Dashboard</p>
-        <p>Patients</p>
+        <p
+          style={{ cursor: "pointer" }}
+          onClick={() => setPage("dashboard")}
+        >
+          Dashboard
+        </p>
+
+        <p
+          style={{ cursor: "pointer" }}
+          onClick={() => setPage("patients")}
+        >
+          Patients
+        </p>
       </div>
 
       {/* MAIN */}
       <div style={{ flex: 1, padding: 30 }}>
+        {page === "dashboard" && (
+          <>
+            <h1>Dashboard</h1>
 
-        {/* DASHBOARD */}
-        <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
-          <div style={{ padding: 15, border: "1px solid #ddd" }}>
-            <h3>Total Patients</h3>
-            <p>{total}</p>
-          </div>
-        </div>
-
-        <h1>Patients</h1>
-
-        {/* ADD FORM */}
-        <div style={{ marginBottom: 20 }}>
-          <input
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ marginRight: 10 }}
-          />
-
-          <input
-            placeholder="Phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            style={{ marginRight: 10 }}
-          />
-
-          <button onClick={addPatient}>Add</button>
-        </div>
-
-        {/* LIST */}
-        {loading ? (
-          <p>Loading patients...</p>
-        ) : (
-          patients.map((p) => (
-            <div
-              key={p.id}
-              style={{
-                padding: 10,
-                borderBottom: "1px solid #eee",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-
-              {/* EDIT MODE */}
-              {editId === p.id ? (
-                <div>
-                  <input
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    style={{ marginRight: 5 }}
-                  />
-
-                  <input
-                    value={editPhone}
-                    onChange={(e) => setEditPhone(e.target.value)}
-                    style={{ marginRight: 5 }}
-                  />
-
-                  <button
-                    onClick={saveEdit}
-                    disabled={!editName || !editPhone}
-                  >
-                    Save
-                  </button>
-
-                  <button
-                    onClick={cancelEdit}
-                    style={{
-                      marginLeft: 5,
-                      background: "gray",
-                      color: "white"
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <span>{p.name} - {p.phone}</span>
-
-                  <div>
-                    <button onClick={() => startEdit(p)}>Edit</button>
-
-                    <button
-                      onClick={() => deletePatient(p.id)}
-                      style={{
-                        background: "red",
-                        color: "white",
-                        marginLeft: 5
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </>
-              )}
-
+            <div style={{ padding: 15, border: "1px solid #ddd", width: 200 }}>
+              <h3>Total Patients</h3>
+              <p>{total}</p>
             </div>
-          ))
+          </>
+        )}
+
+        {page === "patients" && (
+          <>
+            <h1>Patients</h1>
+
+            {/* KEEP YOUR EXISTING PATIENT SYSTEM HERE */}
+            <div style={{ marginBottom: 20 }}>
+              <input
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                style={{ marginRight: 10 }}
+              />
+
+              <input
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                style={{ marginRight: 10 }}
+              />
+
+              <button onClick={addPatient}>Add</button>
+            </div>
+
+            {loading ? (
+              <p>Loading patients...</p>
+            ) : (
+              patients.map((p) => (
+                <div
+                  key={p.id}
+                  style={{
+                    padding: 10,
+                    borderBottom: "1px solid #eee",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  {editId === p.id ? (
+                    <div>
+                      <input
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        style={{ marginRight: 5 }}
+                      />
+
+                      <input
+                        value={editPhone}
+                        onChange={(e) => setEditPhone(e.target.value)}
+                        style={{ marginRight: 5 }}
+                      />
+
+                      <button
+                        onClick={saveEdit}
+                        disabled={!editName || !editPhone}
+                      >
+                        Save
+                      </button>
+
+                      <button
+                        onClick={cancelEdit}
+                        style={{
+                          marginLeft: 5,
+                          background: "gray",
+                          color: "white"
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <span>{p.name} - {p.phone}</span>
+
+                      <div>
+                        <button onClick={() => startEdit(p)}>Edit</button>
+
+                        <button
+                          onClick={() => deletePatient(p.id)}
+                          style={{
+                            background: "red",
+                            color: "white",
+                            marginLeft: 5
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))
+            )}
+          </>
         )}
       </div>
     </div>
